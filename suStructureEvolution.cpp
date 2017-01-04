@@ -122,7 +122,7 @@ int suStructrueOptimizer::init(SU::suVolume *pVolume)
 
 
 
-//�ڱ����Ƴ����£�����ʴ����������Ҫ����Ϊ����Ϊ��ʵ���ȶ������ƣ������͡��ǲ����ٵġ�
+
 
 int suStructrueOptimizer::evolve()
 {
