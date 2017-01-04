@@ -40,13 +40,13 @@ int suStructrueOptimizer::init_morton_coding()
 			nodeArr_[nodePointers[i]->morton] = nodePointers[i];
 		}
 	}
-	
+
 	/*int count = 0;
 	auto countIt = nodeArr_.begin();
 	for (; countIt != nodeArr_.end(); countIt++) {
-		if ((*countIt) == NULL)
-			if ((*countIt)->label_ == SU::INTERIOR_CELL)
-				count++;
+	if ((*countIt) == NULL)
+	if ((*countIt)->label_ == SU::INTERIOR_CELL)
+	count++;
 	}
 	std::cout << count; system("pause");*/
 	return (int)nodeArr_.size();
@@ -139,11 +139,11 @@ int suStructrueOptimizer::evolve()
 		suMorton::get_26neighbors(neighbors, nodeArr_[i]->morton, nodeArr_[i]->level_);
 		for (int j = 0; j < neighbors.size(); j++)
 		{
-			env.push_back(nodeArr_[neighbors[j] ] );
+			env.push_back(nodeArr_[neighbors[j]]);
 		}
 		agent.bind(nodeArr_[i], env);
 		agents.push_back(agent);
-	}	
+	}
 
 	int nIteration = 0;
 
@@ -152,17 +152,17 @@ int suStructrueOptimizer::evolve()
 	float cutRatio = globalValue::globalValuePoint().volumeFraction;
 	int boundaryThickness_ = globalValue::globalValuePoint().boundaryThickness;
 	double maxStrain_ = globalValue::globalValuePoint().maxStrain;
-//#include<iostream>
-//	std::cout << std::endl << "type the cut ratio:";
-//	std::cin >> cutRatio;
-//	std::cout << std::endl << "type the boundary thickness:";
-//	std::cin >> boundaryThickness_;
-//	std::cout << std::endl << "type the maxStrain(default please type '-1'):";
-//	std::cin >> maxStrain_;
+	//#include<iostream>
+	//	std::cout << std::endl << "type the cut ratio:";
+	//	std::cin >> cutRatio;
+	//	std::cout << std::endl << "type the boundary thickness:";
+	//	std::cin >> boundaryThickness_;
+	//	std::cout << std::endl << "type the maxStrain(default please type '-1'):";
+	//	std::cin >> maxStrain_;
 	maxStrain_ = maxStrain_ < 0 ? 9999999999999999999.0 : maxStrain_;
 	for (unsigned int i = 0; i < agents.size(); i++)
 	{
-		agents[i].act(cutRatio,maxStrain_,boundaryThickness_);
+		agents[i].act(cutRatio, maxStrain_, boundaryThickness_);
 	}
 	for (int i = 0; i < agents.size(); i++)
 	{
@@ -184,16 +184,16 @@ int suStructrueOptimizer::run()
 	int iteraTimes = 0;
 	while (true) {
 		std::string oofemAddress = globalValue::globalValuePoint().oofemPath;
-		outForcedOofemFile(oofemAddress+"\\oofemOutFile.txt");
+		outForcedOofemFile(oofemAddress + "\\oofemOutFile.txt");
 		useOofem(oofemAddress);
 		readFeedback(oofemAddress);
 		auto testIt = nodeArr_.begin();
 		globalValue::globalValuePoint().currentIteratorTime++;
 		evolve();
-		
+
 		/*for (; testIt != nodeArr_.end(); testIt++) {
-			if ((*testIt)->out == 1)
-				std::cout << (*testIt)->morton << ":" << (*testIt)->strainSort << ":" << (*testIt)->out << std::endl;
+		if ((*testIt)->out == 1)
+		std::cout << (*testIt)->morton << ":" << (*testIt)->strainSort << ":" << (*testIt)->out << std::endl;
 		}*/
 		if (++iteraTimes == nIterTimes_) break;
 	}
@@ -216,8 +216,8 @@ void suStructrueOptimizer::outOofemfile(std::string outAddress)
 	}
 	/*int count = 0;
 	for (outIt = nodeArr_.begin(); outIt != nodeArr_.begin(); outIt++) {
-		if ((*outIt)->label_ == SU::INTERIOR_CELL)
-			count++;
+	if ((*outIt)->label_ == SU::INTERIOR_CELL)
+	count++;
 	}
 	std::cout << count << std::endl;
 	system("pause");*/
@@ -246,7 +246,7 @@ void suStructrueOptimizer::outOofemfile(std::string outAddress)
 	outIt = nodeArr_.begin();
 	for (; outIt != nodeArr_.end(); outIt++)
 	{
-		if (((*outIt)->label_ == SU::BOUNDARY_CELL || (*outIt)->label_ == SU::BOUNDARY_CELL_SPECIAL 
+		if (((*outIt)->label_ == SU::BOUNDARY_CELL || (*outIt)->label_ == SU::BOUNDARY_CELL_SPECIAL
 			|| (*outIt)->label_ == SU::INTERIOR_CELL) && (*outIt)->out == true)
 		{
 			std::fstream outfile;
@@ -256,7 +256,7 @@ void suStructrueOptimizer::outOofemfile(std::string outAddress)
 			//outfile << pNode->xLocCode_ << "  " << pNode->yLocCode_ << "  " << pNode->zLocCode_ << "  " << pNode->level_ << "  " << pNode->label_ << "  ";
 			//outfile << IndexX << "  " << IndexY << "  " << IndexZ;
 			outfile << "LSpace " << ++number << "	 nodes  8 ";
-			SU::voxel_output* asd = new SU::voxel_output(x, y, z, nLevel_,outAddress);
+			SU::voxel_output* asd = new SU::voxel_output(x, y, z, nLevel_, outAddress);
 			outfile.close();
 			//voxel_output asd(pChildNode, level);
 			asd->output_point1();
@@ -309,11 +309,11 @@ void suStructrueOptimizer::outCoor(float maxX, float maxY, float maxZ, int level
 
 void suStructrueOptimizer::readFeedback(std::string address)
 {
-	read_point_information(address+"\\Majnun.out.m0.1.vtu");
+	read_point_information(address + "\\Majnun.out.m0.1.vtu");
 	float x = (*pVolume_).bbMax_.data()[0] - (*pVolume_).bbMin_.data()[0];
 	float y = (*pVolume_).bbMax_.data()[1] - (*pVolume_).bbMin_.data()[1];
 	float z = (*pVolume_).bbMax_.data()[2] - (*pVolume_).bbMin_.data()[2];
-	read_point_coor(address + "\\Majnun.out.m0.1.vtu",x,y,z,nLevel_);
+	read_point_coor(address + "\\Majnun.out.m0.1.vtu", x, y, z, nLevel_);
 	assignment(nodeArr_);
 }
 
@@ -400,23 +400,23 @@ void suStructrueOptimizer::read_point_information(std::string address)
 															float strain_temp = pow(0.5*(pow(inf_temp.x_strain - inf_temp.y_strain, 2) + pow(inf_temp.y_strain - inf_temp.z_strain, 2) +
 															pow(inf_temp.z_strain-inf_temp.x_strain, 2)), 0.5);*/
 															/*float strain_temp = pow(pow(temp_vector[0] + temp_vector[3] + temp_vector[6], 2)
-																+ pow(temp_vector[1] + temp_vector[4] + temp_vector[7], 2) + pow(temp_vector[2] + temp_vector[5] + temp_vector[8], 2), 0.5);*/
+															+ pow(temp_vector[1] + temp_vector[4] + temp_vector[7], 2) + pow(temp_vector[2] + temp_vector[5] + temp_vector[8], 2), 0.5);*/
 															/*float strain_temp = 0.5*temp_vector[0] * 0.5*temp_vector[4] * 0.5*temp_vector[8] +
-																temp_vector[1] * temp_vector[5] * temp_vector[6] +
-																temp_vector[2] * temp_vector[3] * temp_vector[7] -
-																temp_vector[2] * 0.5*temp_vector[4] * temp_vector[6] -
-																temp_vector[1] * temp_vector[3] * 0.5*temp_vector[8] -
-																0.5*temp_vector[0] * temp_vector[5] * temp_vector[7];*/
+															temp_vector[1] * temp_vector[5] * temp_vector[6] +
+															temp_vector[2] * temp_vector[3] * temp_vector[7] -
+															temp_vector[2] * 0.5*temp_vector[4] * temp_vector[6] -
+															temp_vector[1] * temp_vector[3] * 0.5*temp_vector[8] -
+															0.5*temp_vector[0] * temp_vector[5] * temp_vector[7];*/
 															/*float strain_temp = pow(pow(temp_vector[0]- temp_vector[4],2)+pow(temp_vector[4]- temp_vector[8],2)+pow(temp_vector[0]- temp_vector[8],2),0.5);*/
 															/*float strain_temp = pow(0.5*(pow(temp_vector[0],2)+ pow(temp_vector[1], 2)+ pow(temp_vector[2], 2)+
-																pow(temp_vector[3], 2)+ pow(temp_vector[4], 2)+ pow(temp_vector[5], 2)+
-																pow(temp_vector[6], 2)+ pow(temp_vector[7], 2)+ pow(temp_vector[8], 2)), 2);*/
-															float strain_temp = pow(pow(temp_vector[0],2)+ pow(temp_vector[1], 2)+ pow(temp_vector[2], 2)+
-																pow(temp_vector[3], 2)+ pow(temp_vector[4], 2)+ pow(temp_vector[5], 2)+
-																pow(temp_vector[6], 2)+ pow(temp_vector[7], 2)+ pow(temp_vector[8], 2),0.5);
+															pow(temp_vector[3], 2)+ pow(temp_vector[4], 2)+ pow(temp_vector[5], 2)+
+															pow(temp_vector[6], 2)+ pow(temp_vector[7], 2)+ pow(temp_vector[8], 2)), 2);*/
+															float strain_temp = pow(pow(temp_vector[0], 2) + pow(temp_vector[1], 2) + pow(temp_vector[2], 2) +
+																pow(temp_vector[3], 2) + pow(temp_vector[4], 2) + pow(temp_vector[5], 2) +
+																pow(temp_vector[6], 2) + pow(temp_vector[7], 2) + pow(temp_vector[8], 2), 0.5);
 															/*if(strain_temp>20.0)std::cout << strain_temp << " ";*/
 															/*std::cout << temp_vector[0] << temp_vector[1] << temp_vector[2] << temp_vector[3] << temp_vector[4] << temp_vector[5]
-																<< temp_vector[6] << temp_vector[7] << temp_vector[8];
+															<< temp_vector[6] << temp_vector[7] << temp_vector[8];
 															system("pause");*/
 															all_point_mises_strain.push_back(strain_temp);
 														}
@@ -503,7 +503,7 @@ void suStructrueOptimizer::read_point_coor(std::string address, float box_maxx, 
 									tran[1] = (point_inf_temp[1] + 0.5*dy_) / dy_;
 									tran[2] = (point_inf_temp[2] + 0.5*dz_) / dz_;
 									point_morton.push_back(suMorton::encode(tran[0], tran[1], tran[2], box_level + 1));
-									std::cout << tran[0] << " " << tran[1] << " " << tran[2] << " " 
+									std::cout << tran[0] << " " << tran[1] << " " << tran[2] << " "
 										<< suMorton::encode(tran[0], tran[1], tran[2], box_level + 1) << std::endl;
 
 									//cout << inf_temp.x_strain << " " << inf_temp.y_strain << " " << inf_temp.z_strain << endl;
@@ -607,14 +607,14 @@ void suStructrueOptimizer::assignment(std::vector<SU::OctNode*>& assVector)
 		//std::cout << assIt->strain << ' ';
 	}
 
-	for (assIt=assVector.begin(); assIt != assVector.end(); assIt++)//对所有的auto_cell赋应变值
+	for (assIt = assVector.begin(); assIt != assVector.end(); assIt++)//对所有的auto_cell赋应变值
 	{
 		auto strainThis = (*assIt)->strain;
 		auto sortIt = assVector.begin();
 		int count = 0;
 		for (; sortIt != assVector.end(); sortIt++) {//HOW MUCH SMALLER THAN THIS ONE
-			if ((*sortIt)->label_!=SU::EXTERIOR_CELL&&(*sortIt)->strain < strainThis&&(*sortIt)->out==1)
- 				count++;
+			if ((*sortIt)->label_ != SU::EXTERIOR_CELL && (*sortIt)->strain < strainThis && (*sortIt)->out == 1)
+				count++;
 		}
 
 		(*assIt)->strainSort = (float)(count + 1) / (float)countAllVoxels;
@@ -626,7 +626,7 @@ void suStructrueOptimizer::assignment(std::vector<SU::OctNode*>& assVector)
 float suStructrueOptimizer::return_max_strain(int morton_code, int level)
 {
 	int x, y, z;
-	suMorton::decode(x,y,z,morton_code,level);
+	suMorton::decode(x, y, z, morton_code, level);
 	//先计算对应的八个顶点的莫顿序
 	int point_morton_[8];
 	point_morton_[0] = suMorton::encode(x, y, z, level + 1);
@@ -666,12 +666,12 @@ bool suStructrueOptimizer::export_stl_with_metaball(const char * fileName, std::
 	std::vector<Eigen::Vector3f> bbox;
 
 	Eigen::Vector3d maxP, minP;
-	maxP << pVolume_->bbMax_[0], 
+	maxP << pVolume_->bbMax_[0],
 		pVolume_->bbMax_[1],
 		pVolume_->bbMax_[2];
-	minP << pVolume_->bbMin_[0] ,
-		pVolume_->bbMin_[1] ,
-		pVolume_->bbMin_[2] ;
+	minP << pVolume_->bbMin_[0],
+		pVolume_->bbMin_[1],
+		pVolume_->bbMin_[2];
 
 	Eigen::Vector3f fminP, fmaxP;
 	fminP << minP(0), minP(1), minP(2);
@@ -695,7 +695,7 @@ bool suStructrueOptimizer::export_stl_with_metaball(const char * fileName, std::
 		SU::METABALL m;
 
 		//if (stlVector[i]->label_ == SU::BOUNDARY_CELL || stlVector[i]->label_ == SU::BOUNDARY_CELL_SPECIAL)
-		if (/*!(stlVector[i]->out) &&*/ (stlVector[i]->out == false)  && stlVector[i]->label_ == SU::INTERIOR_CELL)//mellballs only include the voxels been cut
+		if (/*!(stlVector[i]->out) &&*/ (stlVector[i]->out == false) && stlVector[i]->label_ == SU::INTERIOR_CELL)//mellballs only include the voxels been cut
 		{
 			/*SU::Point cP = (stlVector[i]->min_ + stlVector[i]->max_) / 2;
 			//TODO cP的获得方法要改掉
@@ -743,10 +743,10 @@ bool suStructrueOptimizer::export_stl_with_metaball(const char * fileName, std::
 	std::cout << "Dim of Grid: " << resolution << "^ 3" << std::endl;
 	std::cout << "stlVector.size()=" << stlVector.size() << std::endl;
 
-	
+
 	//取势场中threshold=1的等值面	
 	if (mballs.size())
-		SU::write_metaball_to_stl(fileName, /*samples*/mballs, globalValue::globalValuePoint().metaballThreshold, resolution, bbox,pVolume_->mesh_);
+		SU::write_metaball_to_stl(fileName, /*samples*/mballs, globalValue::globalValuePoint().metaballThreshold, resolution, bbox, pVolume_->mesh_);
 
 	return true;
 }
@@ -780,7 +780,7 @@ void suStructrueOptimizer::outForcedOofemFile(std::string outAddress)
 	float x = (*pVolume_).bbMax_.data()[0] - (*pVolume_).bbMin_.data()[0];
 	float y = (*pVolume_).bbMax_.data()[1] - (*pVolume_).bbMin_.data()[1];
 	float z = (*pVolume_).bbMax_.data()[2] - (*pVolume_).bbMin_.data()[2];
-	outForcedCoor(x, y, z, nLevel_,outAddress);
+	outForcedCoor(x, y, z, nLevel_, outAddress);
 
 	int number = 0;
 	outIt = nodeArr_.begin();
@@ -793,11 +793,11 @@ void suStructrueOptimizer::outForcedOofemFile(std::string outAddress)
 			suMorton::decode(x, y, z, (*outIt)->morton, nLevel_);
 			//outfile << pNode->xLocCode_ << "  " << pNode->yLocCode_ << "  " << pNode->zLocCode_ << "  " << pNode->level_ << "  " << pNode->label_ << "  ";
 			//outfile << IndexX << "  " << IndexY << "  " << IndexZ;
-		
+
 			SU::voxel_output* asd = new SU::voxel_output(x, y, z, nLevel_, outAddress);
 
 			//voxel_output asd(pChildNode, level);
-			asd->output_point2(number++,forcedPoint);
+			asd->output_point2(number++, forcedPoint);
 			delete asd;
 		}
 	}
@@ -815,13 +815,13 @@ void suStructrueOptimizer::outForcedOofemFile(std::string outAddress)
 	ss >> possionRatio;
 	ss.clear();
 	ss << globalValue::globalValuePoint().force;
-	ss>>force;
+	ss >> force;
 	ss.clear();
 	ss << globalValue::globalValuePoint().tAlpha;
 	ss >> tAlpha;
-	outfile << "SimpleCS 1 thick 1.0 width 1.0" << std::endl << "IsoLE 1 d "<<density<<" E "<<youngModules<<" n "<<possionRatio<<"  tAlpha "<<tAlpha
+	outfile << "SimpleCS 1 thick 1.0 width 1.0" << std::endl << "IsoLE 1 d " << density << " E " << youngModules << " n " << possionRatio << "  tAlpha " << tAlpha
 		<< std::endl << "BoundaryCondition 1 loadTimeFunction 1 prescribedvalue 0.0"
-		<< std::endl << "ConstantSurfaceLoad 2 ndofs 3 loadType 2 Components 3 0.0 "<<force<<" 0.0 loadTimeFunction 1"
+		<< std::endl << "ConstantSurfaceLoad 2 ndofs 3 loadType 2 Components 3 0.0 " << force << " 0.0 loadTimeFunction 1"
 		<< std::endl << "ConstantFunction 1 f(t) 1.0" << std::endl;
 	outfile.close();
 }
